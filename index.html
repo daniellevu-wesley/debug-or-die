@@ -715,7 +715,7 @@ function renderMenu(app){
     ap(wrap,lbW);
   }
   ap(app,wrap);
-  loadLB().then(function(lb){if(lb&&lb.length){G.lb=lb;render();}});
+  if(!G.menuLbFetched){G.menuLbFetched=true;loadLB().then(function(lb){if(lb&&lb.length&&JSON.stringify(lb)!==JSON.stringify(G.lb)){G.lb=lb;if(G.screen==="menu")render();}});}
 }
 
 function handleLogin(){
@@ -726,7 +726,7 @@ function handleLogin(){
   }).then(function(existing){
     G.worldOverride=null;if(existing){G.profile=existing;duck(rnd(DC.welcome),3500);}
     else{G.profile=emptyProfile(name);duck(rnd(DC.newplayer),3500);}
-    G.screen="hub";render();clearInterval(pollInt);pollInt=setInterval(pollClass,5000);pollClass();
+    G.menuLbFetched=false;G.screen="hub";render();clearInterval(pollInt);pollInt=setInterval(pollClass,5000);pollClass();
   });
 }
 
